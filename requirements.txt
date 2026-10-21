@@ -1,0 +1,9 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pandas>=2.2
+numpy>=1.26
+joblib>=1.4
+# IMPORTANT: use the SAME scikit-learn version that trained best_model.pkl
+# (the notebook that saved it used 1.9.1). Check yours with: pip show scikit-learn
+scikit-learn==1.9.1

@@ -1,0 +1,23 @@
+{
+  "num_of_prev_attempts": 0,
+  "studied_credits": 60,
+  "date_registration": -45,
+  "date_unregistration": null,
+  "num_assessments_done": 2,
+  "avg_score": 62.5,
+  "min_score": 50,
+  "weighted_score": 14.2,
+  "late_submissions": 1,
+  "total_clicks": 850,
+  "active_days": 24,
+  "resources_visited": 40,
+  "clicks_last_30_days": 210,
+  "code_module": "BBB",
+  "code_presentation": "2014J",
+  "gender": "M",
+  "region": "London Region",
+  "highest_education": "A Level or Equivalent",
+  "imd_band": "40-50",
+  "age_band": "0-35",
+  "disability": "N"
+}
