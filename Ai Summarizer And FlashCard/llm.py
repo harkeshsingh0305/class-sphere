@@ -15,7 +15,7 @@ if not api_key:
 
 client = genai.Client(api_key=api_key)
 
-MODEL = "gemini-3.8-flash"
+MODEL = "gemini-3.6-flash"
 
 # Limit the text so very big PDFs do not break the model
 MAX_CHARS = 30000

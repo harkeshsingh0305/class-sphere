@@ -1,5 +1,7 @@
-flask
+Flask
 pymupdf
 python-dotenv
 google-genai
 flask-cors
+gunicorn
+pypdf
