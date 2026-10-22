@@ -1,7 +1,7 @@
 Flask
+gunicorn
 pymupdf
 python-dotenv
 google-genai
 flask-cors
-gunicorn
 pypdf
