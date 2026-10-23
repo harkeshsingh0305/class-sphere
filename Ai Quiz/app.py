@@ -1,7 +1,5 @@
-
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
 from generator import generate_quiz
 from llm import LLMError
 from pdf_utils import extract_text_from_pdf
@@ -9,8 +7,13 @@ from pdf_utils import extract_text_from_pdf
 app = Flask(__name__)
 CORS(app)
 
-ALLOWED_LEVELS = ["easy", "medium", "hard", "mixed"]
+@app.route("/",methods=["GET"])
+def home():
+    return {
+        "message":"AI Quiz Generator API is running"
+    },200
 
+ALLOWED_LEVELS = ["easy", "medium", "hard", "mixed"]
 
 def read_settings(source):
     """Read num_questions and difficulty. Return (num, level, error)."""
