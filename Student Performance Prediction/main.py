@@ -1,9 +1,7 @@
 
 from typing import List, Literal, Optional
-
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator
-
 from predictor import predict_students, THRESHOLD
 
 app = FastAPI(
@@ -13,13 +11,11 @@ app = FastAPI(
 )
 
 
-# INPUT: what the backend must send 
 class StudentData(BaseModel):
-    # Numbers (all counted up to day 90 of the course)
+ 
     num_of_prev_attempts: int = Field(0, ge=0, description="Times the student tried this course before")
     studied_credits: int = Field(..., ge=0, description="Total credits the student is studying")
     date_registration: float = Field(..., description="Day the student registered (relative to course start, e.g. -45)")
-    date_unregistration: Optional[float] = Field(None, description="Day the student unregistered. Send null if not unregistered")
     num_assessments_done: int = Field(0, ge=0, description="Assessments submitted")
     avg_score: float = Field(0, ge=0, le=100, description="Average score (0 if none)")
     min_score: float = Field(0, ge=0, le=100, description="Lowest score (0 if none)")
@@ -30,7 +26,7 @@ class StudentData(BaseModel):
     resources_visited: int = Field(0, ge=0, description="Different resources opened")
     clicks_last_30_days: int = Field(0, ge=0, description="Clicks in the last 30 days (days 61 to 90)")
 
-    #  Text values (only these exact choices are allowed)
+ 
     code_module: Literal["AAA", "BBB", "CCC", "DDD", "EEE", "FFF", "GGG"]
     code_presentation: Literal["2013B", "2013J", "2014B", "2014J"]
     gender: Literal["M", "F"]
@@ -51,7 +47,6 @@ class StudentData(BaseModel):
     age_band: Literal["0-35", "35-55", "55<="]
     disability: Literal["Y", "N"]
 
-    # Accept "20-30%" as well as "20-30" (the dataset has both styles)
     @field_validator("imd_band", mode="before")
     @classmethod
     def remove_percent_sign(cls, value):
@@ -60,14 +55,13 @@ class StudentData(BaseModel):
         return value
 
 
-# OUTPUT: what the backend gets back 
+
 class PredictionResult(BaseModel):
     at_risk: bool              # True = student needs attention
     risk_probability: float    # 0 to 1 (higher = more risk)
     risk_level: str            # "Low", "Medium" or "High"
 
-
-#  ENDPOINTS 
+ 
 @app.get("/")
 def health_check():
     """Backend can call this to check that the API is running."""
