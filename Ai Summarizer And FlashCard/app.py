@@ -14,7 +14,6 @@ app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 def home():
     return "AI Summarizer API is running!"
 
-
 @app.errorhandler(413)
 def file_too_large(error):
     return jsonify({"error": "File is too large. Maximum is 10 MB."}), 413
