@@ -4,7 +4,7 @@ from prompts import build_quiz_prompt
 from validator import validate_questions
 
 MAX_MATERIAL_CHARS = 12000  # keeps the prompt small
-MAX_TRIES = 3
+MAX_TRIES = 2
 
 
 def generate_quiz(topic, material, num_questions, difficulty):
