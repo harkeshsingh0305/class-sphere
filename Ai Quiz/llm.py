@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 FALLBACK_MODEL = os.getenv("GEMINI_FALLBACK_MODEL", "")  # optional backup model
 
 # Wait this many seconds before each try: no wait, then 2s, then 4s
