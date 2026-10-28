@@ -5,10 +5,8 @@ from llm import LLMError
 from pdf_utils import extract_text_from_pdf
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 6 * 1024 * 1024
-
-MAX_PDF_BYTES = 5 * 1024 * 1024
 CORS(app)
+
 
 @app.route("/",methods=["GET"])
 def home():
