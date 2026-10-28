@@ -2,7 +2,7 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-THRESHOLD = 0.35
+THRESHOLD = 0.45
 
 MODEL_PATH = Path(__file__).parent / "best_model.pkl"
 model = joblib.load(MODEL_PATH)
