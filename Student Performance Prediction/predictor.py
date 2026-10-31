@@ -2,45 +2,36 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-THRESHOLD = 0.45
+# Decision threshold chosen in the notebook (`chosen_threshold = 0.35`).
+# A lower threshold than 0.5 catches more at-risk students (recall ~0.75).
+THRESHOLD = 0.35
+
+# The 6 features the model was trained on, in the same order as the notebook's X.
+# (No capping is applied: the notebook no longer clips any column.)
+FEATURE_COLUMNS = [
+    "num_assessments_done",
+    "avg_score",
+    "min_score",
+    "weighted_score",
+    "late_submissions",
+    "active_days",
+]
 
 MODEL_PATH = Path(__file__).parent / "best_model.pkl"
 model = joblib.load(MODEL_PATH)
 
-MODEL_COLUMNS = list(model.feature_names_in_)
+# Safety check: fail at start-up (not at prediction time) if the model and this file disagree.
+_model_columns = list(model.feature_names_in_)
+if _model_columns != FEATURE_COLUMNS:
+    raise RuntimeError(
+        f"Feature mismatch.\nModel expects: {_model_columns}\nPredictor sends: {FEATURE_COLUMNS}"
+    )
 
-CATEGORY_COLUMNS = [
-    "code_module", "code_presentation", "gender", "region",
-    "highest_education", "imd_band", "age_band", "disability",
-]
 
 def build_row(student: dict) -> dict:
-    """Change ONE student (a dictionary) into the 55 columns the model needs."""
-   
-    row = {col: 0 for col in MODEL_COLUMNS}
-   
-    number_columns = [
-        "num_of_prev_attempts", "studied_credits", "date_registration",
-        "num_assessments_done", "avg_score", "min_score", "weighted_score",
-        "late_submissions", "total_clicks", "active_days",
-        "resources_visited", "clicks_last_30_days",
-    ]
-    for col in number_columns:
-        row[col] = student[col]
+    """Pick the 6 columns the model needs from ONE student (a dictionary)."""
+    return {col: student[col] for col in FEATURE_COLUMNS}
 
-    if student["active_days"] > 0:
-        row["avg_clicks_per_day"] = student["total_clicks"] / student["active_days"]
-    else:
-        row["avg_clicks_per_day"] = 0
-
-    row["no_assessment"] = 1 if student["num_assessments_done"] == 0 else 0
-
-    for col in CATEGORY_COLUMNS:
-        dummy_name = f"{col}_{student[col]}"
-        if dummy_name in row:
-            row[dummy_name] = 1
-
-    return row
 
 def risk_level(probability: float) -> str:
     """Simple label for the frontend. You can change these numbers."""
@@ -50,12 +41,12 @@ def risk_level(probability: float) -> str:
         return "Medium"
     return "Low"
 
+
 def predict_students(students: list) -> list:
     """Predict for one or many students. Always takes and returns a list."""
     rows = [build_row(s) for s in students]
-    table = pd.DataFrame(rows, columns=MODEL_COLUMNS)  
+    table = pd.DataFrame(rows, columns=FEATURE_COLUMNS).astype(float)
 
-  
     probabilities = model.predict_proba(table)[:, 1]
 
     results = []

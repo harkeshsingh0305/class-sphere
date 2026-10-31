@@ -4,6 +4,8 @@ pydantic>=2.7
 pandas>=2.2
 numpy>=1.26
 joblib>=1.4
-# IMPORTANT: use the SAME scikit-learn version that trained best_model.pkl
-# (the notebook that saved it used 1.9.1). Check yours with: pip show scikit-learn
-scikit-learn==1.9.1
+# IMPORTANT: best_model.pkl is an XGBClassifier saved with xgboost 3.4.1.
+# Use the same xgboost version to load it safely.
+xgboost==3.4.1
+# Needed by xgboost's scikit-learn interface (XGBClassifier).
+scikit-learn>=1.5
